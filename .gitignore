@@ -1,0 +1,12 @@
+# The following folders and files do not need to be included in the git commits
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+.vscode
+*.sln
+.csproj
