@@ -10,3 +10,4 @@
 .vscode
 *.sln
 .csproj
+.DS_Store
