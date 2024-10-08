@@ -89,7 +89,12 @@ function draw() {
       let sy = 0;
       noStroke();
       let m = dd/3.0 * 255;
-      let col = color(0,m,0);
+      let col;
+      if(sd < cd) {
+        col = color(0,m,0);
+      } else {
+        col = color(m,0,0);
+      }
       //fill(col);
       //ellipse(sx,sy,5,5);
       strokeCap(SQUARE);
@@ -177,7 +182,12 @@ class Playhead {
     let dd = dist(cd,0,sd,0);
     //
     let m = dd/3.0 * 255;
-    let mc = color(0,m,0);
+    let mc;
+      if(sd < cd) {
+        mc = color(0,m,0);
+      } else {
+        mc = color(m,0,0);
+      }
     fill(mc);
     noStroke();
     ellipse(-width/2+10,-height/2+10,10,10);
@@ -208,7 +218,12 @@ class VisualBar {
       let sy = this.y;
       noStroke();
       let m = dd/3.0 * 255;
-      let col = color(0,m,0);
+      let col;
+      if(sd < cd) {
+        col = color(0,m,0);
+      } else {
+        col = color(m,0,0);
+      }
       //fill(col);
       //ellipse(sx,sy,5,5);
       strokeCap(SQUARE);
