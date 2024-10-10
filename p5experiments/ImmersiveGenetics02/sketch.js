@@ -1,4 +1,4 @@
-let visualMode = 2;
+let visualMode = 1;
 
 let cohortData = []; //0.5 -0.5
 let sampleData = []; //3 -3
@@ -11,13 +11,15 @@ let dir = 1;
 let pStart, pEnd;
 let pTime;
 
+let geneSound;
+
 function setup() {
   createCanvas(800, 400, WEBGL);
   
   // add data
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random()*1-0.5;
-    sampleData[i] = Math.random()*6-3;
+    cohortData[i] = Math.random() - 0.5;
+    sampleData[i] = Math.random() * 6 - 3;
   }
   
   vb1 = new VisualBar(cohortData,sampleData, 0, -50);
@@ -37,8 +39,8 @@ function setup() {
   
   // playhead
   playhead = new Playhead();
-  
-  
+
+  geneSound = new GeneSound();
 }
 
 function draw() {
@@ -52,7 +54,7 @@ function draw() {
     playhead.play();
     playhead.checkExtent();
   } else {
-    pTime++;
+    pTime += deltaTime;
   }
   if(playhead.seeking) {
     playhead.seek();
@@ -79,24 +81,32 @@ function draw() {
   }
   
   if(visualMode == 1) {
-    for(let i=0; i<sampleData.length; i++) {
+    vb3.render();
+    // for(let i=0; i<sampleData.length; i++) {
       
-      // sample
-      let cd = cohortData[i];
-      let sd = sampleData[i];
-      let dd = dist(cd,0,sd,0);
-      let sx = width/sampleData.length * i - width/2;
-      let sy = 0;
-      noStroke();
-      let m = dd/3.0 * 255;
-      let col = color(0,m,0);
-      //fill(col);
-      //ellipse(sx,sy,5,5);
-      strokeCap(SQUARE);
-      strokeWeight(30);
-      stroke(col);
-      line(sx,sy,sx+width/sampleData.length,sy);
-    }
+    //   // sample
+    //   let cd = cohortData[i];231
+    //   let sd = sampleData[i];
+    //   let dd = dist(cd,0,sd,0);
+    //   let sx = width/sampleData.length * i - width/2;
+    //   let sy = 0;
+    //   noStroke();
+    //   let m = dd/3.0 * 255;
+    //   let col = color(0,m,0);
+    //   //fill(col);
+    //   //ellipse(sx,sy,5,5);
+    //   strokeCap(SQUARE);
+    //   strokeWeight(30);
+    //   stroke(col);
+    //   line(sx,sy,sx+width/sampleData.length,sy);
+    // }
+  }
+
+  let indexVal = Math.round(playhead.location);
+  if (vb3.colorData[indexVal] != undefined) {
+    let colorValue = vb3.colorData[indexVal]["levels"][1];
+
+    geneSound.playSound(colorValue);
   }
   
   if(visualMode == 2) {
@@ -130,6 +140,7 @@ function mousePressed() {
     print("seek");
     playhead.seeking = true;
   }
+
 }
 
 function mouseReleased() {
@@ -158,7 +169,7 @@ class Playhead {
   }
   
   seek() {
-    this.location = mouseX/width*vb1.cohortData.length-1
+    this.location = (mouseX / width * vb1.cohortData.length) - 1
     //print(mouseX/width*vb1.cohortData.length-1);
   }
   
@@ -192,12 +203,11 @@ class VisualBar {
     this.sampleData = sd.slice();
     this.x = xp;
     this.y = yp;
+    this.colorData = Array();
   }
   
-  
-  
   render() {
-    
+    this.colorData = Array();
     for(let i=0; i<this.sampleData.length; i++) {
       
       // sample
@@ -209,6 +219,7 @@ class VisualBar {
       noStroke();
       let m = dd/3.0 * 255;
       let col = color(0,m,0);
+      this.colorData.push(col);
       //fill(col);
       //ellipse(sx,sy,5,5);
       strokeCap(SQUARE);
@@ -223,6 +234,5 @@ class VisualBar {
       fill(col);
       rect(sx,sy,width/this.sampleData.length,30);
     }
-    
   }
 }
