@@ -57,7 +57,17 @@ function setup() {
 	  asset: testTexture,
 	  dynamicTexture: true,
 	  dynamicTextureWidth: 256,
-	  dynamicTextureHeight: 256
+	  dynamicTextureHeight: 256,
+    clickFunction: function(e) {
+		  // when this plane is touched this function will run
+		  // note that in AR the precision of the mouse / touch detection isn't the greatest
+		  // and the A-Frame P% AR library can only support clickFucntions in AR at the moment	
+		  // (support for other events may be added in the future)
+      console.log("blah");      
+	      e.setRed( random(255) );
+	      e.setGreen( random(255) );
+	      e.setBlue( random(255) );
+    }
   });
   marker.add(basePlane);
 
@@ -120,7 +130,10 @@ function setup() {
 	  asset: texture1,
 	  dynamicTexture: true,
 	  dynamicTextureWidth: 256,
-	  dynamicTextureHeight: 256
+	  dynamicTextureHeight: 256,
+    clickFunction: function(e) {
+      console.log("toggle isolate 1"); 
+    }
   });
 
   let fc2 = new Box({
@@ -129,7 +142,10 @@ function setup() {
 	  asset: texture2,
 	  dynamicTexture: true,
 	  dynamicTextureWidth: 256,
-	  dynamicTextureHeight: 256
+	  dynamicTextureHeight: 256,
+    clickFunction: function(e) {
+      console.log("toggle isolate 2");
+    }
   });
 
   let fc3 = new Box({
@@ -138,7 +154,10 @@ function setup() {
 	  asset: texture3,
 	  dynamicTexture: true,
 	  dynamicTextureWidth: 256,
-	  dynamicTextureHeight: 256
+	  dynamicTextureHeight: 256,
+    clickFunction: function(e) {
+      console.log("toggle isolate 3");
+    }
   });
 
   marker.add(fc1);
