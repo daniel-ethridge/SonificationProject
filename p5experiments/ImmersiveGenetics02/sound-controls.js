@@ -1,11 +1,12 @@
 
 class GeneSound {
 
-    constructor () {
+    constructor (panAmt) {
 
         this.osc = new p5.SqrOsc();
         this.playing = false;
-        // this.panner = new p5.Panner();
+        this.osc.pan(panAmt)
+
         // this.panner.pan(-1.0);
 
         // this.stopOscillator = () => {

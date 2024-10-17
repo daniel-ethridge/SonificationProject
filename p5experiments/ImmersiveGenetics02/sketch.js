@@ -25,8 +25,6 @@ let geneSound1, geneSound2, geneSound3;
 function setup() {
   createCanvas(800, 400);
 
-
-
   pg = createGraphics(200,10);
   for(let i=0; i<200; i+=10) {
     pg.noStroke();
@@ -68,21 +66,21 @@ function setup() {
 
   // add data
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() - 0.5;
-    sampleData[i] = Math.random() * 6 - 3;
+    cohortData[i] = Math.random() - 0.5 + 8;
+    sampleData[i] = Math.random() * 4 - 2 + 8;
   }
   
   vb1 = new VisualBar(cohortData,sampleData, 0, -50);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random()*1-0.5;
-    sampleData[i] = Math.random()*6-3;
+    cohortData[i] = Math.random() - 0.5 + 5;
+    sampleData[i] = Math.random() * 4 - 2 + 5;
   }
   vb2 = new VisualBar(cohortData,sampleData, 0, 0);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random()*1-0.5;
-    sampleData[i] = Math.random()*6-3;
+    cohortData[i] = Math.random() - 0.5 + 2;
+    sampleData[i] = Math.random() * 4 - 2 + 2;
   }
   vb3 = new VisualBar(cohortData,sampleData, 0, 50);
 
@@ -152,9 +150,9 @@ function setup() {
   stopButton.position(10, 350);
   stopButton.style("z-index: 1000");
   
-  geneSound1 = new GeneSound();
-  geneSound2 = new GeneSound();
-  geneSound3 = new GeneSound();
+  geneSound1 = new GeneSound(-1);
+  geneSound2 = new GeneSound(0);
+  geneSound3 = new GeneSound(1);
 
   startButton.mousePressed(() => {
     geneSound1.startOscillator();
@@ -405,6 +403,8 @@ class VisualBar {
     this.x = xp;
     this.y = yp;
     this.pg = createGraphics(width,10);
+
+    // this.offset = 
   
     this.colorData = Array();
   }
@@ -458,7 +458,7 @@ class VisualBar {
       let sx = width/this.sampleData.length * i;//this.x + width/this.sampleData.length * i - width/2;
       let sy = 0;//this.y;
       //this.pg.noStroke();
-      let m = dd/3.0 * 255;
+      let m = dd/4.0 * 255;
       let col = color(0,m,0);
       this.colorData.push(col);
       //fill(col);
