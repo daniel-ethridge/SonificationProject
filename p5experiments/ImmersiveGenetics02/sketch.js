@@ -66,21 +66,21 @@ function setup() {
 
   // add data
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() - 0.5 + 8;
-    sampleData[i] = Math.random() * 4 - 2 + 8;
+    cohortData[i] = Math.random() * 30;
+    sampleData[i] = Math.random() * 50;
   }
   
   vb1 = new VisualBar(cohortData,sampleData, 0, -50);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() - 0.5 + 5;
-    sampleData[i] = Math.random() * 4 - 2 + 5;
+    cohortData[i] = Math.random() * 30;
+    sampleData[i] = Math.random() * 50;
   }
   vb2 = new VisualBar(cohortData,sampleData, 0, 0);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() - 0.5 + 2;
-    sampleData[i] = Math.random() * 4 - 2 + 2;
+    cohortData[i] = Math.random() * 175;
+    sampleData[i] = Math.random() * 175;
   }
   vb3 = new VisualBar(cohortData,sampleData, 0, 50);
 
@@ -278,7 +278,7 @@ function draw() {
   for(let i=0; i<cbArr.length; i++) {
     // calculate distribution of cubes
     translate(sp,0,20);
-    vbArr[i].putTexture();
+    vbArr[i].putTexture(i);
     //texture(vbArr[i].pg.get());
     //box(cbArr[i].w,cbArr[i].h,cbArr[i].d);
 
@@ -445,7 +445,7 @@ class VisualBar {
     
   }
 
-  putTexture() {
+  putTexture(arr_idx) {
     //console.log("put");
     this.colorData = Array();
 
@@ -458,7 +458,15 @@ class VisualBar {
       let sx = width/this.sampleData.length * i;//this.x + width/this.sampleData.length * i - width/2;
       let sy = 0;//this.y;
       //this.pg.noStroke();
-      let m = dd/4.0 * 255;
+      let m;
+      if (arr_idx == 0) {
+        m = dd + 50;
+        console.log(dd);
+      } else if (arr_idx == 1) {
+        m = dd + 100
+      } else {
+        m = dd + 120;
+      }
       let col = color(0,m,0);
       this.colorData.push(col);
       //fill(col);
