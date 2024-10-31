@@ -56,7 +56,8 @@ class GeneSound {
             return;
         }
 
-        let freq_ = map(colorVal, 0, 255, 100, 300);
+        let exponent = (colorVal - 127) / 127;
+        let freq_ = 220.0 * (2 ** exponent);
         this.osc.freq(freq_, 0.1);
         this.osc.amp(0.4, 0.1);
     }
