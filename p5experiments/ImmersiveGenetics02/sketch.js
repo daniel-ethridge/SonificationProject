@@ -64,24 +64,24 @@ function setup() {
 
   // - - -
 
-  // add data
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() * 30;
-    sampleData[i] = Math.random() * 50;
+    cohortData[i] = Math.random() * 10;
+    sampleData[i] = Math.random() * 10;
   }
   
   vb1 = new VisualBar(cohortData,sampleData, 0, -50);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() * 30;
-    sampleData[i] = Math.random() * 50;
+    cohortData[i] = Math.random() * 20;
+    sampleData[i] = Math.random() * 20;
   }
   vb2 = new VisualBar(cohortData,sampleData, 0, 0);
   
   for(let i=0; i<100; i++) {
-    cohortData[i] = Math.random() * 175;
-    sampleData[i] = Math.random() * 175;
+    cohortData[i] = Math.random() * 100;
+    sampleData[i] = Math.random() * 100;
   }
+
   vb3 = new VisualBar(cohortData,sampleData, 0, 50);
 
   cb1 = {'w':300,'h':20,'d':10};
@@ -458,17 +458,19 @@ class VisualBar {
       let sx = width/this.sampleData.length * i;//this.x + width/this.sampleData.length * i - width/2;
       let sy = 0;//this.y;
       //this.pg.noStroke();
+      console.log(dd);
+
       let m;
       if (arr_idx == 0) {
-        m = dd + 50;
-        console.log(dd);
+        m = (dd + 122 - 77) * (255 / 100);
       } else if (arr_idx == 1) {
-        m = dd + 100
+        m = (dd + 117 - 77) * (255 / 100);
       } else {
-        m = dd + 120;
+        m = dd * (255 / 100);
       }
       let col = color(0,m,0);
       this.colorData.push(col);
+
       //fill(col);
       //ellipse(sx,sy,5,5);
       //this.pg.strokeCap(SQUARE);
