@@ -8,10 +8,12 @@ function preload() {
   table = loadTable('v2_test_mean100_std20.csv', 'header');
 }
 
+let sdFactor = 3;
+
 
 
 function setup() {
-  let p5Canvas = createCanvas(620, 3000);
+  let p5Canvas = createCanvas(3000, 3000);
   console.log("setup...");
 
   background(255);
@@ -131,66 +133,40 @@ function draw() {
           
   
               let v = table.getNum(g+p,s);
-  
-              //let y = g+p;
-  
-              //let t = map(v,100,300,255,0);
-              //stroke(t);
-              //line(x,y, x+3,y);
               
               mu = 200;
               std = 28;
               let t = (v - mu) / std;
-              console.log(t);
-              // let t = norm(v,172,228);//work out normalised version
               
-              if(t>3 || t<-3) {
-                  fill(255,0,0,204);
+              if(t>sdFactor || t<-sdFactor) {
                   noStroke();
-                  //ellipse(x,y+t/3*10,4,4);
-                  //
-                  let c1 = color(255,255,255);
-                  let c2 = color(255,255,0);
-                  let mc = lerpColor(c1,c2,t);
-                  //fill(mc);
+                  console.log(t, "no tm");
                   if(t<0) {
                   fill("#00494B");
                   } else {
                     fill("#79260A");
                   }
-                  rect(x,y,3,15);
+                  rect(x,y,1,15);
               } else {
-                fill(0,51);
-                //fill(0,0,0);
                   noStroke();
-                  //ellipse(x,y+t/3*10,3,3);
                   let c1 = color("#FFFFE0");
-                  let c2 = color("#3EA8A6");
-                  let c3 = color("#DD8629");
+                  let c2 = color("#BBE4D1");
+                  let c3 = color("#FFD593");
                   let mc;
                   if(t>0) {
-                    mc = lerpColor(c1,c2,t);
+                    mc = lerpColor(c1,c2,t); // or could be tm instead of t
                   } else {
-                    mc = lerpColor(c1,c3,abs(t));
+                    mc = lerpColor(c1,c3,abs(t)); // or could be tm instead of t
                   }
                   fill(mc);
-                  rect(x,y,3,15);
+                  rect(x,y,1,15);
               }
 
-              x +=3;
-              
+              x +=1;
                   
           }
-
-          //x += 6;
-          //y = 20 + g + g/pn*20; //+ offset for vertical
-          
-  
       }
-      noLoop();
     }
 
-
-
-  
+    noLoop();
 }
