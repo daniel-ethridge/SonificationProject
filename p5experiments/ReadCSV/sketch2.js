@@ -63,7 +63,7 @@ function setup() {
             let t = (v - mu) / std;
             // let t = norm(v,172,228);//work out normalised version
             
-            if(t>3 || t<-3) {
+            if(t>sdFactor || t<-sdFactor) {
                 fill(255,0,0,204);
                 noStroke();
                 ellipse(x,y+t/3*10,4,4);
@@ -130,9 +130,10 @@ function draw() {
        
           for(let p=0; p<pn; p++) { //for probe
   
-          
-  
               let v = table.getNum(g+p,s);
+              if(g==0 && s==1) {
+                console.log("sanity check", v);
+              }
               
               mu = 200;
               std = 28;
