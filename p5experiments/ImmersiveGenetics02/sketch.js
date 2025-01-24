@@ -22,14 +22,45 @@ let pg;
 let buffer1, buffer2, buffer3;
 let geneSound1, geneSound2, geneSound3;
 
+let c1;// = color("#FFFFE0");
+let c2;// = color("#BBE4D1");
+let c3;// = color("#FFD593");
+let sdFactor = 3;
+
+// Global object to hold results from the loadTable call
+let table;
+
+// Put any asynchronous data loading in preload to complete before "setup" is run
+function preload() {
+  table = loadTable('data/v2_test_mean100_std20.csv', 'header');
+  console.log("table loaded");
+}
+
 function setup() {
   createCanvas(800, 400);
+
+  c1 = color("#FFFFE0");
+  c2 = color("#BBE4D1");
+  c3 = color("#FFD593");
 
   pg = createGraphics(200,10);
   for(let i=0; i<200; i+=10) {
     pg.noStroke();
     pg.fill(Math.random()*255,Math.random()*255,Math.random()*255);
     pg.rect(i,0,10,10);
+  }
+
+  //create data
+  let tableGene1 = [];
+  let pn = 10;
+  for(let g=0; g<1; g+=pn) {
+    for(let s=1; s<table.getColumnCount(); s++) {  
+      for(let p=0; p<pn; p++) { //for probe
+        let v = table.getNum(g+p,s);
+        console.log("v", v);
+        tableGene1.push(v);
+      }
+    }
   }
 
   
@@ -69,7 +100,7 @@ function setup() {
     sampleData[i] = Math.random() * 10;
   }
   
-  vb1 = new VisualBar(cohortData,sampleData, 0, -50);
+  vb1 = new VisualBar2(tableGene1, 0, 0);
   
   for(let i=0; i<100; i++) {
     cohortData[i] = Math.random() * 20;
@@ -84,12 +115,12 @@ function setup() {
 
   vb3 = new VisualBar(cohortData,sampleData, 0, 50);
 
-  cb1 = {'w':300,'h':20,'d':10};
+  cb1 = {'w':1000,'h':20,'d':10};
   cb2 = {'w':300,'h':20,'d':10};
   cb3 = {'w':300,'h':20,'d':10};
 
-  cbArr = [cb1,cb2,cb3];
-  vbArr = [vb1,vb2,vb3];
+  cbArr = [cb1];//[cb1,cb2,cb3];
+  vbArr = [vb1];//[vb1,vb2,vb3];
   
   // playhead
   playhead = new Playhead();
@@ -112,7 +143,7 @@ function setup() {
 
   let fc1 = new Box({
 	  width: 2, height: 0.3, depth: 0.2,
-	  x: -3, y: 1, z: 0,
+	  x: 0, y: 1, z: 0,
 	  asset: texture1,
 	  dynamicTexture: true,
 	  dynamicTextureWidth: 256,
@@ -138,8 +169,8 @@ function setup() {
   });
 
   marker.add(fc1);
-  marker.add(fc2);
-  marker.add(fc3);
+  //marker.add(fc2);
+  //marker.add(fc3);
 
   const startButton = createButton("Start Audio");
   startButton.position(10, 320);
@@ -232,7 +263,7 @@ function draw() {
   let indexVal = Math.round(playhead.location);
 
   if (vb1.colorData[indexVal] != undefined) {
-    let colorValue = vb1.colorData[indexVal]["levels"][1];
+    let colorValue = 0;// vb1.colorData[indexVal]["levels"][1]; //important!
 
     geneSound1.playSound(colorValue);
   }
@@ -272,11 +303,11 @@ function draw() {
 
 
   // render cubes
-  let sp = cbArr[0].w+50;
-  translate(-cbArr.length/2*sp - cbArr[0].w/2,0,0);
+  //let sp = cbArr[0].w+50;
+  //translate(-cbArr.length/2*sp - cbArr[0].w/2,0,0);
   for(let i=0; i<cbArr.length; i++) {
     // calculate distribution of cubes
-    translate(sp,0,20);
+    //translate(sp,0,20);
     vbArr[i].putTexture(i);
     //texture(vbArr[i].pg.get());
     //box(cbArr[i].w,cbArr[i].h,cbArr[i].d);
@@ -367,21 +398,21 @@ class Playhead {
   }
   
   seek() {
-    this.location = (mouseX / width * vb1.cohortData.length) - 1
+    this.location = (mouseX / width * vb1.sampleData.length) - 1
     //print(mouseX/width*vb1.cohortData.length-1);
   }
   
   checkExtent() {
-    if(this.location > vb1.cohortData.length-1) {
+    if(this.location > vb1.sampleData.length-1) {
       this.location = 0;
     }
     if(this.location < 0) {
-      this.location = vb1.cohortData.length-1;
+      this.location = vb1.sampleData.length-1;
     }
   }
   
   render() {
-    let cd = vb1.cohortData[Math.round(this.location)];
+    /*let cd = vb1.sampleData[Math.round(this.location)];
     let sd = vb1.sampleData[Math.round(this.location)];
     let dd = dist(cd,0,sd,0);
     //
@@ -390,6 +421,7 @@ class Playhead {
     fill(mc);
     noStroke();
     ellipse(-width/2+10,-height/2+10,10,10);
+    */
   }
 }
 
@@ -485,6 +517,146 @@ class VisualBar {
         this.pg.noFill()
         this.pg.strokeWeight(2);
         this.pg.rect(sx,sy+1,width/this.sampleData.length,30-2);
+      }
+    }
+  }
+}
+
+class VisualBar2 {
+  constructor(data, xp, yp) {
+    //this.cohortData = data.slice();//arrayCopy(d, dataset);
+    this.sampleData = data.slice();
+    this.x = xp;
+    this.y = yp;
+    this.width = 1000;
+    this.pg = createGraphics(this.width,10);
+
+    // this.offset = 
+  
+    this.colorData = Array();
+  }
+  
+  render() {
+    console.log("RENDER CALLED");
+    this.colorData = Array();
+    for(let i=0; i<this.sampleData.length; i++) {
+      
+      // sample
+      let sd = this.sampleData[i];
+      //let cd = this.cohortData[i];
+      //let dd = dist(cd,0,sd,0);
+      let sx = this.x + this.width/this.sampleData.length * i - this.width/2;
+      let sy = this.y;
+      //noStroke();
+      //let m = dd/3.0 * 255;
+      //let col = color(0,m,0);
+      //this.colorData.push(col);
+      //fill(col);
+      //ellipse(sx,sy,5,5);
+      //strokeCap(SQUARE);
+      //strokeWeight(30);
+      //stroke(col);
+      //line(sx,sy,sx+width/this.sampleData.length,sy);
+      //noStroke();
+      
+      //fill(col);
+      //rect(sx,sy,width/this.sampleData.length,30);
+
+      // draw playhead
+      if(i == Math.round(playhead.location)) {
+        stroke(255,153,0);
+        noFill()
+        strokeWeight(2);
+        rect(sx,sy+1,this.width/this.sampleData.length,30-2);
+      }
+    }
+    
+  }
+
+  putTexture(arr_idx) {
+    //console.log("put");
+    this.colorData = Array();
+
+    let x=0;
+    let y=0;
+
+    for(let i=0; i<this.sampleData.length; i++) {
+      
+      // sample
+      //let cd = this.sampleData[i];
+      //let sd = this.sampleData[i];
+      //let dd = dist(cd,0,sd,0);
+      let sx = this.width/this.sampleData.length * i;//this.x + width/this.sampleData.length * i - width/2;
+      let sy = 0;//this.y;
+      //this.pg.noStroke();
+
+      let v = this.sampleData[i];
+
+      let mu = 200;
+      let std = 28;
+      let z = (v - mu) / std;
+      //console.log("v", v, "t", t);
+
+      /*let m;
+      if (arr_idx == 0) {
+        m = (dd + 122 - 77) * (255 / 100);
+      } else if (arr_idx == 1) {
+        m = (dd + 117 - 77) * (255 / 100);
+      } else {
+        m = dd * (255 / 100);
+      }
+      let col = color(0,m,0);*/
+
+      // important!
+      this.colorData.push(z); // use to be col
+      // important!
+
+      //fill(col);
+      //ellipse(sx,sy,5,5);
+      //this.pg.strokeCap(SQUARE);
+      //this.pg.strokeWeight(30);
+      //stroke(col);
+      //line(sx,sy,sx+width/this.sampleData.length,sy);
+      this.pg.noStroke();
+
+      if(z>sdFactor || z<-sdFactor) {
+        
+        //console.log(t, "no tm");
+        if(z<0) {
+          this.pg.fill("#00494B");
+        } else {
+          this.pg.fill("#79260A");
+        }
+        this.pg.rect(sx,y,1,15);
+      } else {
+        noStroke();
+        let c1 = color("#FFFFE0");
+        let c2 = color("#BBE4D1");
+        let c3 = color("#FFD593");
+        let mc;
+        if(z>0) {
+          mc = lerpColor(c1,c2,z); // or could be tm instead of t
+        } else {
+          mc = lerpColor(c1,c3,abs(z)); // or could be tm instead of t
+        }
+        this.pg.fill(mc);
+        //this.pg.fill(255,0,255);
+        this.pg.rect(sx,y,1,15);
+      }
+      x++;
+
+      //
+      //this.pg.noStroke();
+      
+      //this.pg.fill(col);
+      //this.pg.rect(sx,sy,this.width/this.sampleData.length,30);
+
+      if(i == Math.round(playhead.location)) {
+        //console.log("playhead match", i);
+        this.pg.stroke(0);
+        this.pg.noFill();
+        this.pg.strokeWeight(3);
+        this.pg.rect(sx,sy+1,this.width/this.sampleData.length,30-2);
       }
     }
   }
