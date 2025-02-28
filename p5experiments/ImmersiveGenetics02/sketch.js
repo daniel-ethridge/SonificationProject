@@ -16,6 +16,7 @@ let cb1, cb2, cb3;
 
 let cbArr,vbArr;
 
+let once = false;
 
 let pg;
 
@@ -63,7 +64,6 @@ function setup() {
     }
   }
 
-  
   //create other canvas?
   world = new World('ARScene');
 
@@ -181,14 +181,14 @@ function setup() {
   stopButton.position(10, 350);
   stopButton.style("z-index: 1000");
   
-  geneSound1 = new GeneSound(-1);
+  geneSound1 = new GeneSound(0);
   geneSound2 = new GeneSound(0);
   geneSound3 = new GeneSound(1);
 
   startButton.mousePressed(() => {
     geneSound1.startOscillator();
-    geneSound2.startOscillator();
-    geneSound3.startOscillator();
+    // geneSound2.startOscillator();
+    // geneSound3.startOscillator();
   })
 
   stopButton.mousePressed(() => {
@@ -263,21 +263,21 @@ function draw() {
   let indexVal = Math.round(playhead.location);
 
   if (vb1.colorData[indexVal] != undefined) {
-    let colorValue = 0;// vb1.colorData[indexVal]["levels"][1]; //important!
+    let colorValue = vb1.colorData[indexVal]; //important!
 
-    geneSound1.playSound(colorValue);
+    geneSound1.playSound(colorValue, 2);
   }
 
   if (vb2.colorData[indexVal] != undefined) {
     let colorValue = vb2.colorData[indexVal]["levels"][1];
 
-    geneSound2.playSound(colorValue);
+    // geneSound2.playSound(colorValue);
   }
 
   if (vb3.colorData[indexVal] != undefined) {
     let colorValue = vb3.colorData[indexVal]["levels"][1];
 
-    geneSound3.playSound(colorValue);
+    // geneSound3.playSound(colorValue);
   }
 
   
