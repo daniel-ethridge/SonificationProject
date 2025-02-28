@@ -10,3 +10,7 @@
 .vscode
 *.sln
 .csproj
+.idea
+.utils
+data
+*venv*/
