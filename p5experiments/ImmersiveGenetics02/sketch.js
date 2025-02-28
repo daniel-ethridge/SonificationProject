@@ -142,7 +142,7 @@ function setup() {
   let texture3 = world.createDynamicTextureFromCreateGraphics(vb3.pg);
 
   let fc1 = new Box({
-	  width: 2, height: 0.3, depth: 0.2,
+	  width: 3, height: 0.3, depth: 0.2,
 	  x: 0, y: 1, z: 0,
 	  asset: texture1,
 	  dynamicTexture: true,
@@ -631,8 +631,8 @@ class VisualBar2 {
       } else {
         noStroke();
         let c1 = color("#FFFFE0");
-        let c2 = color("#BBE4D1");
-        let c3 = color("#FFD593");
+        let c2 = color("#76C7BE");
+        let c3 = color("#F5AD52");
         let mc;
         if(z>0) {
           mc = lerpColor(c1,c2,z); // or could be tm instead of t
